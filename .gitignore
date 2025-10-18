@@ -1,0 +1,21 @@
+# NetBeans
+nbproject/private/
+build/
+dist/
+nbdist/
+.nb-gradle/
+
+# Maven
+target/
+
+# VS Code
+.vscode/
+
+# Arquivos de IDE genéricos
+.idea/
+*.iml
+*.iws
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
