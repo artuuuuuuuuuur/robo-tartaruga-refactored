@@ -1,45 +1,62 @@
 package com.trabrobotartaruga.robo_tartaruga.Classes;
 
 public class Robo {
-    String cor;
+    private String cor;
     private int posicaoX;
     private int posicaoY;
 
-    public Robo(String cor){
-        this.cor=cor;
-        posicaoX=0;
-        posicaoY=0;
+    public Robo(String cor) {
+        this.cor = cor;
+        this.posicaoX = 0;
+        this.posicaoY = 0;
     }
 
-    public int getPosicaoX(){
+    public int getPosicaoX() {
         return posicaoX;
     }
-    public void setPosicaoX(int posicaoX){
-        this.posicaoX=posicaoX;
+
+    public void setPosicaoX(int posicaoX) {
+        this.posicaoX = posicaoX;
     }
 
-    public int getPosicaoY(){
+    public int getPosicaoY() {
         return posicaoY;
     }
-    public void setPosicaoY(int posicaoY){
-        this.posicaoY=posicaoY;
+
+    public void setPosicaoY(int posicaoY) {
+        this.posicaoY = posicaoY;
     }
 
-    public void mover(String movimento) throws MovimentoInvalidoException{
-        if(movimento.equalsIgnoreCase("up")){
-            posicaoY+= 1;
+    public void mover(String movimento) throws MovimentoInvalidoException {
+
+        switch (movimento.toLowerCase()) {
+            case "up":
+                posicaoY++;
+                break;
+            case "down":
+                posicaoY--;
+                break;
+            case "right":
+               posicaoX++;
+                break;
+            case "left":
+               posicaoX--;
+                break;
+            default:
+                System.out.println("Movimento inválido: " + movimento);
+                return;
         }
 
-        else if(movimento.equalsIgnoreCase("")){
-
+        if(posicaoX < 0 || posicaoY < 0){
+            throw new MovimentoInvalidoException(posicaoX);
+        }
+        else{
+             throw new MovimentoInvalidoException(posicaoY);
         }
 
-        else if(movimento.equalsIgnoreCase("")){
 
-        }
 
-        else if(movimento.equalsIgnoreCase("")){
-
-        }
+        System.out.println("Robô " + cor + " está agora em (" + posicaoX + ", " + posicaoY + ")");
     }
 }
+   
