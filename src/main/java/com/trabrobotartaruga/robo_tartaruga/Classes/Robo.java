@@ -72,7 +72,8 @@ public class Robo {
                 posicaoX--;
                 break;
             default:
-            System.out.println("Apenas 1, 2, 3 e 4 são permitidos!");            
+                System.out.println("Apenas 1, 2, 3 e 4 são permitidos!");
+                 return;
         }
 
         if(posicaoX<0){
