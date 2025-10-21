@@ -8,18 +8,19 @@ import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
 public class Map {
     private final int x; 
     private final int y; 
-    List<List<Position>> positions = new CopyOnWriteArrayList<>();
-    List<Bot> bots;
+    private List<List<Position>> positions;
+    private List<Bot> bots;
 
     public Map(int x, int y, List<Bot> bots) {
         this.x = x;
         this.y = y;
+        positions = new CopyOnWriteArrayList<>();
         for (int i = y-1; i <= 0; i--) {
-            List<Position> linha = new CopyOnWriteArrayList<>();
+            List<Position> row = new CopyOnWriteArrayList<>();
             for (int j = 0; j < x; j++) {
-                linha.add(j, new Position(x, y));
+                row.add(j, new Position(x, y));
             }
-            positions.add(y, linha);
+            positions.add(y, row);
         }
         this.bots = bots;
         
@@ -42,6 +43,24 @@ public class Map {
 
     public List<Bot> getBots() {
         return bots;
+    }
+    
+    public void updateBots() {
+        bots.clear();
+        for (List<Position> positionRow : positions) {
+            for (Position positionCell : positionRow) {
+                if(!positionCell.getObjects().isEmpty()) {
+                    for (Object object : positionCell.getObjects()) {
+                        if(object instanceof Bot bot) {
+                            if(bot.getPosX() != positionCell.getPosX() && bot.getPosY() != positionCell.getPosY()) {
+                                positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
+                                positionCell.getObjects().remove(bot);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }

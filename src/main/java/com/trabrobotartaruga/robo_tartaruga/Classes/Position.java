@@ -28,4 +28,13 @@ public class Position {
     public void setObjects(List<Object> objects) {
         this.objects = objects;
     }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+    
 }
