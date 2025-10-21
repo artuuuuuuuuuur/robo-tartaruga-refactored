@@ -1,7 +1,8 @@
-package com.trabrobotartaruga.robo_tartaruga.Classes;
+package com.trabrobotartaruga.robo_tartaruga.exceptions;
 
 
-public class MovimentoInvalidoException extends Exception{
+public class InvalidMoveException extends Exception{
+    @Override
     public String toString(){
         return "O movimento é inválido pois está em uma posição fora da matriz!";
     }

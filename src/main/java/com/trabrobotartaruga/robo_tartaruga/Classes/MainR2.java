@@ -1,16 +1,19 @@
-package com.trabrobotartaruga.robo_tartaruga.Classes;
+package com.trabrobotartaruga.robo_tartaruga.classes;
 import java.util.Scanner;
+
+import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
+import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
 
 public class MainR2 {
     public static void main(String args[]){
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite uma cor para o robô 1:");
         String cor1 = sc.nextLine();
-        Robo robo1 = new Robo(cor1);
+        Bot robo1 = new Bot(cor1);
         
         System.out.println("Digite outra cor para o robô 2:");
         String cor2 = sc.nextLine();
-        Robo robo2 = new Robo(cor2);
+        Bot robo2 = new Bot(cor2);
 
         System.out.println("Digite as coordenadas do alimento:");
         System.out.print("X: ");
@@ -32,7 +35,7 @@ public class MainR2 {
                 if(robo1.getPosicaoX() >= 0 && robo1.getPosicaoX() <= 4 && robo1.getPosicaoY() >= 0 && robo1.getPosicaoY() <= 4){
                     quant_val1++;
                 }
-            }catch(MovimentoInvalidoException e1){
+            }catch(InvalidMoveException e1){
                 e1.mensagemDeErro();
                 quant_inval1++;
             }
@@ -44,7 +47,7 @@ public class MainR2 {
                 if(robo2.getPosicaoX() >= 0 && robo2.getPosicaoX() <= 4 && robo2.getPosicaoY() >= 0 && robo2.getPosicaoY() <= 4){
                     quant_val2++;
                 }
-            }catch(MovimentoInvalidoException e2){
+            }catch(InvalidMoveException e2){
                 e2.mensagemDeErro();
                 quant_inval2++;
             }

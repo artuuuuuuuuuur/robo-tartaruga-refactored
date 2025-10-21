@@ -1,13 +1,16 @@
-package com.trabrobotartaruga.robo_tartaruga.Classes;
+package com.trabrobotartaruga.robo_tartaruga.classes;
 
 import java.util.Scanner;
+
+import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
+import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
 
 public class MainR1 {
     public static void main(String argrs[]){
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite uma cor para o robô:");
         String cor = sc.nextLine();
-        Robo robo = new Robo(cor);
+        Bot robo = new Bot(cor);
         System.out.println("Digite as coordenadas do alimento:");
         System.out.print("X: ");
         int x = sc.nextInt();
@@ -16,11 +19,11 @@ public class MainR1 {
         sc.nextLine();
         
         while (robo.verificarAlimentoEncontrado(x, y) == false) {
+            System.out.println("Digite o movimento: ");
+            String movimento = sc.nextLine();
             try{
-                System.out.println("Digite o movimento: ");
-                String movimento = sc.nextLine();
                 robo.mover(movimento);
-            }catch(MovimentoInvalidoException e){
+            }catch(InvalidMoveException e){
                 e.mensagemDeErro();
             }
             
