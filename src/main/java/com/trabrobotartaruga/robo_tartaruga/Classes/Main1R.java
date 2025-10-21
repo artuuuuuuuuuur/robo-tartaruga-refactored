@@ -39,9 +39,9 @@ public class Main1R {
             System.out.println("Digite o movimento: ");
             String movimento = sc.nextLine();
             try{
-                robo.mover(movimento);
+                robo.move(movimento);
             }catch(InvalidMoveException e){
-                e.mensagemDeErro();
+                e.error();
             }
             
         }
