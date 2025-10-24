@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
@@ -53,9 +54,12 @@ public class TabletopController {
                     pause();
                     try {
                         switch (bot) {
-                            case RandomBot randomBot -> randomBot.move("");
-                            case SmartBot smartBot -> smartBot.move(0);
-                            default -> bot.move(1);
+                            case RandomBot randomBot ->
+                                randomBot.move("");
+                            case SmartBot smartBot ->
+                                smartBot.move(0);
+                            default ->
+                                bot.move(1);
                         }
                     } catch (InvalidMoveException e) {
                         System.out.println(e.toString());
@@ -64,10 +68,16 @@ public class TabletopController {
                     Platform.runLater(() -> {
                         map.updateBots();
                         showBots();
-                        if (map.checkFoodFound()) {
-                            goToFinalScreen();
-                        }
                     });
+                    if (map.checkFoodFound()) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        Platform.runLater(this::goToFinalScreen);
+                    }
                 }
             }
         }).start();
@@ -102,6 +112,9 @@ public class TabletopController {
             for (int j = 0; j < map.getY(); j++) {
                 FlowPane gridCell = (FlowPane) gameGrid.lookup("#gridCell" + i + "" + j);
                 gridCell.getChildren().clear();
+                if (map.getFood().getPosX() == j && map.getFood().getPosY() == i) {
+                    gridCell.setBackground(Background.fill(Paint.valueOf("green")));
+                }
             }
         }
         for (int i = 0; i < map.getX(); i++) {

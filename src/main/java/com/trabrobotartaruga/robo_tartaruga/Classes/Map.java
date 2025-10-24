@@ -36,7 +36,7 @@ public class Map {
             this.positions.get(0).get(0).getObjects().add(bot);
         }
 
-        positions.get(food.getPosY()).get(food.getPosX()).getObjects().add(food);
+        positions.get(food.getPosX()).get(food.getPosY()).getObjects().add(food);
 
         foodFound = false;
     }
@@ -51,6 +51,10 @@ public class Map {
 
     public int getY() {
         return y;
+    }
+
+    public Food getFood() {
+        return food;
     }
 
     public List<Bot> getBots() {
