@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -37,6 +38,7 @@ public class TabletopController {
 
     private Map map;
     private final Semaphore semaphore = new Semaphore(0);
+    private Bot lastPlayedBot;
 
     @FXML
     GridPane gameGrid;
@@ -55,6 +57,10 @@ public class TabletopController {
             while (!map.checkFoodFound()) {
                 Platform.runLater(() -> map.updateBots());
                 for (Bot bot : map.getBots()) {
+                    if (bot.equals(lastPlayedBot)) {
+                        continue;
+                    }
+
                     try {
                         Thread.sleep(1500);
                         switch (bot) {
@@ -62,13 +68,17 @@ public class TabletopController {
                                 randomBot.move("");
                             case SmartBot smartBot ->
                                 smartBot.move(0);
-                            default ->
+                            default -> {
                                 move(bot);
+                                pause();
+                            }
                         }
                     } catch (InvalidMoveException e) {
                         System.out.println(e.toString());
                     } catch (InterruptedException e) {
                     }
+
+                    lastPlayedBot = bot;
 
                     Platform.runLater(() -> {
                         map.updateBots();
@@ -78,7 +88,6 @@ public class TabletopController {
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         Platform.runLater(this::goToFinalScreen);
@@ -89,11 +98,20 @@ public class TabletopController {
     }
 
     private void move(Bot bot) throws InvalidMoveException {
-        Platform.runLater(() -> {
-            HBox playerHBox = (HBox) tabletopAnchorPane.lookup("#playerHBox");
-            TextField moveTextField = (TextField) tabletopAnchorPane.lookup("moveTextField");
-            playerHBox.setDisable(false);
-        });
+
+        HBox playerHBox = (HBox) tabletopAnchorPane.lookup("#playerHBox");
+        TextField moveTextField = (TextField) tabletopAnchorPane.lookup("#moveTextField");
+        playerHBox.setDisable(false);
+        pause();
+
+        try {
+            bot.move(moveTextField.getText());
+        } catch (InvalidMoveException e) {
+            playerHBox.setDisable(true);
+            throw e;
+        }
+        playerHBox.setDisable(true);
+        resume();
     }
 
     public void resume() {
