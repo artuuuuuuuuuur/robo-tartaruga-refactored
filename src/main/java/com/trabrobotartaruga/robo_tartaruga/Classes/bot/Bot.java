@@ -14,7 +14,7 @@ public class Bot {
     public Bot(String color, int mapX, int mapY) {
         this.color = color;
         this.posX = 0;
-        this.posY = 3;
+        this.posY = 0;
         this.mapX = mapX;
         this.mapY = mapY;
     }
@@ -42,16 +42,16 @@ public class Bot {
     public void move(String move) throws InvalidMoveException {
         switch (move.toLowerCase()) {
             case "up" -> {
-                if (posY > 0) {
+                if (posY < mapY - 1) {
                     moveUp();
                 } else {
-                    posY = 0;
+                    posY = mapY - 1;
                     throw new InvalidMoveException();
                 }
                 break;
             }
             case "down" -> {
-                if (posY < mapX - 1) {
+                if (posY > 0) {
                     moveDown();
                 } else {
                     throw new InvalidMoveException();
@@ -85,17 +85,17 @@ public class Bot {
     public void move(int i) throws InvalidMoveException {
         switch (i) {
             case 1 -> {
-                if (posY > 0) {
+                if (posY < mapY - 1) {
                     moveUp();
                 } else {
-                    posY = 0;
+                    posY = mapY - 1;
                     throw new InvalidMoveException();
                 }
                 break;
             }
 
             case 2 -> {
-                if (posY < mapX - 1) {
+                if (posY > 0) {
                     moveDown();
                 } else {
                     throw new InvalidMoveException();
@@ -127,12 +127,12 @@ public class Bot {
     }
 
     private void moveUp() {
-        posY--;
+        posY++;
         lastMove = 1;
     }
 
     private void moveDown() {
-        posY++;
+        posY--;
         lastMove = 2;
     }
 

@@ -35,10 +35,9 @@ public class TabletopController {
                 for (Bot bot : map.getBots()) {
                     pause();
                     try {
-                        bot.move(1);
                         bot.move(4);
                     } catch (InvalidMoveException e) {
-                        // Do something
+                        e.printStackTrace();
                     }
                     Platform.runLater(() -> {
                         map.updateBots();

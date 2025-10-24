@@ -33,7 +33,7 @@ public class Map {
         this.bots = bots;
 
         for (Bot bot : bots) {
-            this.positions.get(3).get(0).getObjects().add(bot);
+            this.positions.get(0).get(0).getObjects().add(bot);
         }
 
         positions.get(food.getPosY()).get(food.getPosX()).getObjects().add(food);
@@ -70,7 +70,7 @@ public class Map {
             if (bot.getPosX() == food.getPosX() && bot.getPosY() == food.getPosY()) {
                 foodFound = true;
                 System.out.println("O robô " + bot.getColor() + " encontrou o alimento!");
-                return;
+                break;
             }
         }
     }

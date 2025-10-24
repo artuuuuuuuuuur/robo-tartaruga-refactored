@@ -26,22 +26,22 @@
             <RowConstraints maxHeight="103.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <FlowPane fx:id="gridCell00" prefHeight="320.0" prefWidth="602.0" />
-            <FlowPane fx:id="gridCell01" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" />
-            <FlowPane fx:id="gridCell02" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" />
-            <FlowPane fx:id="gridCell03" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" />
-            <FlowPane fx:id="gridCell10" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="1" />
-            <FlowPane fx:id="gridCell11" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <FlowPane fx:id="gridCell12" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <FlowPane fx:id="gridCell13" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <FlowPane fx:id="gridCell20" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="2" />
-            <FlowPane fx:id="gridCell21" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <FlowPane fx:id="gridCell22" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <FlowPane fx:id="gridCell23" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <FlowPane fx:id="gridCell30" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="3" />
-            <FlowPane fx:id="gridCell31" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <FlowPane fx:id="gridCell32" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <FlowPane fx:id="gridCell33" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <FlowPane fx:id="gridCell03" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <FlowPane fx:id="gridCell02" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <FlowPane fx:id="gridCell01" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <FlowPane fx:id="gridCell00" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="3" />
+            <FlowPane fx:id="gridCell20" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="1" />
+            <FlowPane fx:id="gridCell13" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <FlowPane fx:id="gridCell12" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <FlowPane fx:id="gridCell11" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <FlowPane fx:id="gridCell33" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" />
+            <FlowPane fx:id="gridCell32" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" />
+            <FlowPane fx:id="gridCell31" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" />
+            <FlowPane fx:id="gridCell30" prefHeight="320.0" prefWidth="602.0" />
+            <FlowPane fx:id="gridCell10" prefHeight="320.0" prefWidth="602.0" GridPane.rowIndex="2" />
+            <FlowPane fx:id="gridCell21" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <FlowPane fx:id="gridCell22" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <FlowPane fx:id="gridCell23" prefHeight="320.0" prefWidth="602.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button layoutX="240.0" layoutY="380.0" mnemonicParsing="false" onAction="#resume" prefHeight="25.0" prefWidth="103.0" text="AVANÇAR" textFill="#0a0000">
