@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -33,6 +34,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class TabletopController {
@@ -58,7 +60,7 @@ public class TabletopController {
             while (!map.checkFoodFound()) {
                 Platform.runLater(() -> map.updateBots());
                 for (Bot bot : map.getBots()) {
-                    if (bot.equals(lastPlayedBot)) {
+                    if (bot.equals(lastPlayedBot) && map.getBots().size() > 1) {
                         continue;
                     }
 
@@ -121,7 +123,7 @@ public class TabletopController {
                     moved = true;
                 } catch (InvalidMoveException e) {
                     playerHBox.setDisable(true);
-                    e.printStackTrace();
+                    Platform.runLater(() -> showErrorPane(e.toString()));
                     moved = false;
                 } catch (InvalidInputException ex) {
                     try {
@@ -129,12 +131,12 @@ public class TabletopController {
                         moved = true;
                     } catch (InvalidMoveException | InvalidInputException e) {
                         moved = false;
-                        e.printStackTrace();
+                        Platform.runLater(() -> showErrorPane(e.toString()));
                     }
                     playerHBox.setDisable(true);
                 }
             } else {
-                new InvalidInputException().printStackTrace();
+                Platform.runLater(() -> showErrorPane(new InvalidInputException().toString()));
                 moved = false;
             }
         }
@@ -163,7 +165,24 @@ public class TabletopController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private void showErrorPane(String message) {
+        try {
+            Stage stage = new Stage();
+            Scene scene;
+            scene = new Scene(new FXMLLoader(App.class.getResource("error.fxml")).load());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Label warningLabel = (Label) scene.lookup("#warningLabel");
+            warningLabel.setText(message);
+            Button okButton = (Button) scene.lookup("#okButton");
+            okButton.setOnAction(eh -> {
+                stage.close();
+            });
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
         }
     }
 

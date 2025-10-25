@@ -48,8 +48,7 @@ public class PlayerScreenController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tabuleiro.fxml"));
         Parent root = loader.load();
 
-        bots.add(new SmartBot("blue", 4, 4));
-        bots.add(new RandomBot("pink", 4, 4));
+        bots.add(new Bot("pink", 4, 4));
 
         Map map = new Map(4, 4, bots, food, obstacles);
 
