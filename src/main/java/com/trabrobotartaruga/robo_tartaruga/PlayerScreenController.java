@@ -24,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -61,8 +62,11 @@ public class PlayerScreenController implements Initializable {
     }
 
     public void playGame(Event event) throws IOException {
+        CheckBox oneWinnerCheckBox = (CheckBox) gameModeAnchorPane.lookup("#oneWinnerCheckBox");
         String botColor1 = "";
         String botColor2 = "";
+        String botType1 = "";
+        String botType2 = "";
         for (int i = 0; i < 2; i++) {
             ComboBox<String> chooseBotComboBox = (ComboBox) gameModeAnchorPane.lookup("#chooseBot" + (i + 1) + "ComboBox");
             ColorPicker colorBotPicker = (ColorPicker) gameModeAnchorPane.lookup("#colorBot" + (i + 1) + "Picker");
@@ -73,10 +77,14 @@ public class PlayerScreenController implements Initializable {
             }
 
             switch (i) {
-                case 0 ->
+                case 0 -> {
                     botColor1 = colorBotPicker.getValue().toString();
-                case 1 ->
+                    botType1 = chooseBotComboBox.getValue();
+                }
+                case 1 -> {
                     botColor2 = colorBotPicker.getValue().toString();
+                    botType2 = chooseBotComboBox.getValue();
+                }
             }
         }
 
@@ -107,10 +115,35 @@ public class PlayerScreenController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tabuleiro.fxml"));
         Parent root = loader.load();
 
-        bots.add(new Bot("pink", 4, 4));
-        bots.add(new SmartBot("green", 4, 4));
+        switch (botType1) {
+            case "Robô normal" -> {
+                bots.add(new Bot(botColor1, 4, 4));
+            }
+            case "Robô aleatório" -> {
+                bots.add(new RandomBot(botColor1, 4, 4));
+            }
+            case "Robô inteligente" -> {
+                bots.add(new SmartBot(botColor1, 4, 4));
+            }
+        }
 
-        Map map = new Map(4, 4, bots, food, obstacles, true);
+        switch (botType2) {
+            case "Robô normal" -> {
+                bots.add(new Bot(botColor2, 4, 4));
+            }
+            case "Robô aleatório" -> {
+                bots.add(new RandomBot(botColor2, 4, 4));
+            }
+            case "Robô inteligente" -> {
+                bots.add(new SmartBot(botColor2, 4, 4));
+            }
+        }
+
+        if (bots.size() != 2) {
+            errorMessage("Escolha exatamente 2 robôs para iniciar.");
+        }
+
+        Map map = new Map(4, 4, bots, food, obstacles, oneWinnerCheckBox.isSelected());
 
         TabletopController tabletopController = loader.getController();
         tabletopController.load(map);

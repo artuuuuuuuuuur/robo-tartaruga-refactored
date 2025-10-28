@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -10,10 +11,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="gameModeAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="792.0" style="-fx-background-color: #FFFF77;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trabrobotartaruga.robo_tartaruga.PlayerScreenController">
+<AnchorPane fx:id="gameModeAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="792.0" style="-fx-background-color: #FFFF77;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trabrobotartaruga.robo_tartaruga.PlayerScreenController">
    <children>
       <Label alignment="CENTER" layoutX="178.0" layoutY="30.0" text="Modo de Jogo" textFill="#0a0000" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="193.0" AnchorPane.topAnchor="30.0">
          <font>
@@ -39,7 +41,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Pane layoutX="25.0" layoutY="41.0" prefHeight="320.0" prefWidth="320.0">
+            <Pane layoutX="25.0" layoutY="41.0" prefHeight="361.0" prefWidth="361.0">
                <children>
                   <GridPane fx:id="previewGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="360.0" prefWidth="360.0" style="-fx-background-color: white;">
                     <columnConstraints>
@@ -77,8 +79,46 @@
             </Pane>
          </children>
       </Pane>
-      <Pane fx:id="statsPane" layoutX="553.0" layoutY="163.0" prefHeight="123.0" prefWidth="200.0" AnchorPane.rightAnchor="39.0" />
-      <Pane layoutX="450.0" layoutY="363.0" prefHeight="115.0" prefWidth="303.0" AnchorPane.bottomAnchor="52.0" AnchorPane.rightAnchor="39.0">
+      <VBox layoutX="450.0" layoutY="113.0" prefHeight="236.0" prefWidth="303.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="113.0">
+         <children>
+            <Label text="Tipos de Robôs">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label text="- Normal: controlado pelo usuário">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="- Aleatório: se move aleatoriamente">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label prefHeight="66.0" prefWidth="303.0" text="- Inteligente: se move aleatoriamente, mas não repete o movimento anterior, caso seja inválido" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="Obstáculos">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label text="- Bomba: explode o robô que encontrá-la">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label prefHeight="42.0" prefWidth="303.0" text="- Pedra: faz o robô que a encontra voltar para a posição anterior" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Pane layoutX="450.0" layoutY="421.0" prefHeight="115.0" prefWidth="303.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="421.0">
          <children>
             <Button fx:id="startButton" layoutX="153.0" layoutY="77.0" mnemonicParsing="false" onAction="#playGame" prefHeight="31.0" prefWidth="150.0" text="START" textFill="#0a0000">
                <font>
@@ -96,10 +136,15 @@
             </Button>
          </children>
       </Pane>
-      <Label layoutX="483.0" layoutY="324.0" text="Escolha os robôs-tartaruga">
+      <Label layoutX="483.0" layoutY="287.0" text="Escolha os robôs-tartaruga" AnchorPane.leftAnchor="483.0" AnchorPane.topAnchor="350.0">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
+      <CheckBox fx:id="oneWinnerCheckBox" layoutX="450.0" layoutY="390.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="163.0" selected="true" text="Apenas 1 vencedor" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="390.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
    </children>
 </AnchorPane>
