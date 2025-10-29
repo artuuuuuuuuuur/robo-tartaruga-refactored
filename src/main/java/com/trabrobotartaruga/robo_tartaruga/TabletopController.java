@@ -37,9 +37,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -90,6 +92,7 @@ public class TabletopController {
                         }
 
                         boolean goodMove = true;
+                        Platform.runLater(() -> botTurn(bot));
 
                         try {
                             Thread.sleep(600);
@@ -106,6 +109,29 @@ public class TabletopController {
                             }
                         } catch (InvalidMoveException e) {
                             bot.setInvalidMoves(bot.getInvalidMoves() + 1);
+                            final String lastMove;
+                            switch (bot.getLastMove()) {
+                                case 1 ->
+                                    lastMove = "cima";
+                                case 2 ->
+                                    lastMove = "baixo";
+                                case 3 ->
+                                    lastMove = "esquerda";
+                                case 4 ->
+                                    lastMove = "direita";
+                                default ->
+                                    lastMove = "";
+                            }
+
+                            switch (bot) {
+                                case SmartBot smartBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô inteligente fez um movimento inválido para " + lastMove));
+                                case RandomBot randomBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô aleatório fez um movimento inválido para " + lastMove));
+                                case Bot currenBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô normal fez um movimento inválido para " + lastMove));
+                            }
+
                             goodMove = false;
                         } catch (InvalidInputException | InterruptedException e) {
                             goodMove = false;
@@ -116,6 +142,17 @@ public class TabletopController {
                             bot.setValidMoves(bot.getValidMoves() + 1);
                         }
                         bot.setRounds(bot.getRounds() + 1);
+
+                        if(goodMove) {
+                            switch (bot) {
+                                case SmartBot smartBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô inteligente se moveu."));
+                                case RandomBot randomBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô aleatório se moveu."));
+                                case Bot currenBot ->
+                                    Platform.runLater(() -> createLogLabel("Robô normal se moveu."));
+                            }
+                        }
 
                         syncUpdate(() -> {
                             map.updateBots();
@@ -134,7 +171,7 @@ public class TabletopController {
 
                             syncUpdate(() -> {
                                 try {
-                                    map.obstacleAction();
+                                    map.obstacleAction(this);
                                     map.updateBots();
                                     showBots();
                                 } catch (InvalidMoveException | InvalidInputException e) {
@@ -261,6 +298,32 @@ public class TabletopController {
             stage.show();
         } catch (IOException e) {
         }
+    }
+
+    private void botTurn(Bot bot) {
+        Label botTurnLabel = (Label) tabletopAnchorPane.lookup("#botTurnLabel");
+        switch (bot) {
+            case SmartBot smartBot -> {
+                botTurnLabel.setText("Robô inteligente");
+                botTurnLabel.setTextFill(Paint.valueOf(smartBot.getColor()));
+            }
+            case RandomBot randomBot -> {
+                botTurnLabel.setText("Robô aleatório");
+                botTurnLabel.setTextFill(Paint.valueOf(randomBot.getColor()));
+            }
+            case Bot currentBot -> {
+                botTurnLabel.setText("Robô normal");
+                botTurnLabel.setTextFill(Paint.valueOf(currentBot.getColor()));
+            }
+        }
+    }
+
+    public void createLogLabel(String message) {
+        VBox moveLogsVBox = (VBox) tabletopAnchorPane.lookup("#moveLogsVBox");
+        Label newLabel = new Label(message);
+        newLabel.setTextFill(Paint.valueOf("white"));
+        newLabel.setFont(new Font(15));
+        moveLogsVBox.getChildren().add(newLabel);
     }
 
     private void showBots() {

@@ -3,6 +3,7 @@ package com.trabrobotartaruga.robo_tartaruga.classes;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.trabrobotartaruga.robo_tartaruga.TabletopController;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
 import com.trabrobotartaruga.robo_tartaruga.classes.obstacle.Bomb;
 import com.trabrobotartaruga.robo_tartaruga.classes.obstacle.Obstacle;
@@ -138,9 +139,9 @@ public class Map {
         checkAllBotsDisabled();
     }
 
-    public void obstacleAction() throws InvalidMoveException, InvalidInputException {
+    public void obstacleAction(TabletopController tabletopController) throws InvalidMoveException, InvalidInputException {
         for (Obstacle obstacle : obstacles) {
-            obstacle.hit(this);
+            obstacle.hit(this, tabletopController);
             if (obstacle instanceof Bomb bomb) {
                 if (bomb.isExploded()) {
                     obstacles.remove(bomb);

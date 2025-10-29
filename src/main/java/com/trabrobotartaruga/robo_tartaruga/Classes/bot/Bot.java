@@ -23,7 +23,7 @@ public class Bot {
         this.mapX = mapX;
         this.mapY = mapY;
         this.validMoves = 0;
-        this.invalidMoves = 0; 
+        this.invalidMoves = 0;
         this.rounds = 0;
         this.active = true;
     }
@@ -61,7 +61,7 @@ public class Bot {
             default ->
                 throw new InvalidInputException();
         }
-        
+
         switch (move.toLowerCase()) {
             case "up" -> {
                 if (posY < mapY - 1) {
@@ -100,7 +100,6 @@ public class Bot {
                 throw new InvalidInputException();
             }
         }
-        System.out.println("Robô " + color + " está agora em (" + posX + ", " + posY + ")");
     }
 
     public void move(int i) throws InvalidMoveException, InvalidInputException {
@@ -145,7 +144,6 @@ public class Bot {
                 throw new InvalidInputException();
             }
         }
-        System.out.println("Robô " + color + " está agora em (" + posX + ", " + posY + ")");
     }
 
     private void moveUp() {

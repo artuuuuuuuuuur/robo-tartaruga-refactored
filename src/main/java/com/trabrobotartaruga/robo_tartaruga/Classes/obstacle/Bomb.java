@@ -1,7 +1,10 @@
 package com.trabrobotartaruga.robo_tartaruga.classes.obstacle;
 
+import com.trabrobotartaruga.robo_tartaruga.TabletopController;
 import com.trabrobotartaruga.robo_tartaruga.classes.Map;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
+import com.trabrobotartaruga.robo_tartaruga.classes.bot.RandomBot;
+import com.trabrobotartaruga.robo_tartaruga.classes.bot.SmartBot;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidInputException;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
 
@@ -15,13 +18,20 @@ public class Bomb extends Obstacle {
     }
 
     @Override
-    public void hit(Map map) throws InvalidMoveException, InvalidInputException {
+    public void hit(Map map, TabletopController tabletopController) throws InvalidMoveException, InvalidInputException {
         if (!exploded) {
             for (Object object : map.getPositions().get(posY).get(posX).getObjects()) {
                 if (object instanceof Bot bot) {
                     bot.setActive(false);
                     exploded = true;
-                    System.out.println("O robô " + bot.getColor() + " explodiu.");
+                    switch (bot) {
+                        case SmartBot smartBot ->
+                            tabletopController.createLogLabel("Robô inteligente explodiu.");
+                        case RandomBot randomBot ->
+                            tabletopController.createLogLabel("Robô aleatório explodiu.");
+                        case Bot currenBot ->
+                            tabletopController.createLogLabel("Robô normal explodiu.");
+                    }
                 }
             }
         }
