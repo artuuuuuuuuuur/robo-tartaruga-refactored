@@ -136,7 +136,6 @@ public class FinalScreenController {
                 return "azul";
             }
             default -> {
-                System.out.println(hexColor);
                 return hexColor;
             }
         }
