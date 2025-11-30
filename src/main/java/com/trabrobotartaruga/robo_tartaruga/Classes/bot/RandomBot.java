@@ -8,8 +8,8 @@ public class RandomBot extends Bot {
 
     public RandomBot(String color, int mapX, int mapY) {
         super(color, mapX, mapY);
+        type = "Robô aleatório";
     }
-
 
     @Override
     public void move(String ignored) throws InvalidMoveException, InvalidInputException {

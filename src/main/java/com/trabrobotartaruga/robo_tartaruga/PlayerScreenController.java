@@ -39,9 +39,9 @@ import javafx.stage.Stage;
 
 public class PlayerScreenController implements Initializable {
 
-    private List<Bot> bots = new CopyOnWriteArrayList<>();
+    private final List<Bot> bots = new CopyOnWriteArrayList<>();
     private Food food;
-    private List<Obstacle> obstacles = new CopyOnWriteArrayList<>();
+    private final List<Obstacle> obstacles = new CopyOnWriteArrayList<>();
 
     @FXML
     GridPane previewGrid;
@@ -60,7 +60,7 @@ public class PlayerScreenController implements Initializable {
             }
         });
     }
-    
+
     public void goBack(Event event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tela_inicial.fxml"));
         Parent root = loader.load();
@@ -79,23 +79,21 @@ public class PlayerScreenController implements Initializable {
             ComboBox<String> chooseBotComboBox = (ComboBox) gameModeAnchorPane.lookup("#chooseBot" + (i + 1) + "ComboBox");
             ColorPicker colorBotPicker = (ColorPicker) gameModeAnchorPane.lookup("#colorBot" + (i + 1) + "Picker");
 
-            if(i == 0) {
+            if (i == 0) {
                 if (chooseBotComboBox.getValue() == null || colorBotPicker.getValue() == null) {
                     errorMessage("Escolha uma cor e o tipo do robô " + (i + 1) + ".");
                     return;
                 }
             }
 
-            switch (i) {
-                case 0 -> {
-                    botColor1 = colorBotPicker.getValue().toString();
-                    botType1 = chooseBotComboBox.getValue();
-                }
-                case 1 -> {
-                    botColor2 = colorBotPicker.getValue().toString();
-                    botType2 = chooseBotComboBox.getValue();
-                }
+            if (i == 0) {
+                botColor1 = colorBotPicker.getValue().toString();
+                botType1 = chooseBotComboBox.getValue();
+            } else {
+                botColor2 = colorBotPicker.getValue().toString();
+                botType2 = chooseBotComboBox.getValue();
             }
+
         }
 
         if (botColor1.equals(botColor2)) {
@@ -125,30 +123,10 @@ public class PlayerScreenController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tabuleiro.fxml"));
         Parent root = loader.load();
 
-        switch (botType1) {
-            case "Robô normal" -> {
-                bots.add(new Bot(botColor1, 4, 4));
-            }
-            case "Robô aleatório" -> {
-                bots.add(new RandomBot(botColor1, 4, 4));
-            }
-            case "Robô inteligente" -> {
-                bots.add(new SmartBot(botColor1, 4, 4));
-            }
-        }
+        bots.add(botType1.equals("Robô normal") ? new Bot(botColor1, 4, 4) : (botType1.equals("Robô inteligente") ? new SmartBot(botColor1, 4, 4) : new RandomBot(botColor1, 4, 4)));
 
         if (botType2 != null) {
-            switch (botType2) {
-                case "Robô normal" -> {
-                    bots.add(new Bot(botColor2, 4, 4));
-                }
-                case "Robô aleatório" -> {
-                    bots.add(new RandomBot(botColor2, 4, 4));
-                }
-                case "Robô inteligente" -> {
-                    bots.add(new SmartBot(botColor2, 4, 4));
-                }
-            }
+            bots.add(botType2.equals("Robô normal") ? new Bot(botColor2, 4, 4) : (botType2.equals("Robô inteligente") ? new SmartBot(botColor2, 4, 4) : new RandomBot(botColor2, 4, 4)));
         }
 
         Map map = new Map(4, 4, bots, food, obstacles, oneWinnerCheckBox.isSelected());

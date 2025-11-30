@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
-import com.trabrobotartaruga.robo_tartaruga.classes.bot.RandomBot;
-import com.trabrobotartaruga.robo_tartaruga.classes.bot.SmartBot;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -13,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
@@ -24,15 +21,13 @@ import javafx.stage.Stage;
 public class FinalScreenController {
 
     @FXML
-    Button menuButton;
-    @FXML
     Label h1Label;
     @FXML
     Label h2Label;
     @FXML
     GridPane rankGridPane;
 
-    public void build(List<Bot> bots, List<Bot> winnerBots) {
+    public void build(@SuppressWarnings("exports") List<Bot> bots, @SuppressWarnings("exports") List<Bot> winnerBots) {
         int slot = 1;
         if (winnerBots.isEmpty()) {
             h1Label.setText("OOPS!");
@@ -55,14 +50,9 @@ public class FinalScreenController {
                 Label invalidMoves = (Label) rankGridPane.lookup("#invalidMovesLabel" + (slot));
                 Label rounds = (Label) rankGridPane.lookup("#roundsLabel" + (slot));
                 Label foundFood = (Label) rankGridPane.lookup("#foundFoodLabel" + (slot));
-                switch (winnerBot) {
-                    case RandomBot randomBot ->
-                        botType.setText("Aleatório");
-                    case SmartBot smartBot ->
-                        botType.setText("Inteligente");
-                    default ->
-                        botType.setText("Normal");
-                }
+
+                botType.setText(winnerBot.getType().replace("Robô ", ""));
+
                 botColor.setText(colorDecoder(winnerBot.getColor()));
                 botColorVBox.setBackground(Background.fill(Paint.valueOf(winnerBot.getColor())));
                 validMoves.setText(String.valueOf(winnerBot.getValidMoves()));
@@ -89,14 +79,9 @@ public class FinalScreenController {
                     Label invalidMoves = (Label) rankGridPane.lookup("#invalidMovesLabel" + (slot));
                     Label rounds = (Label) rankGridPane.lookup("#roundsLabel" + (slot));
                     Label foundFood = (Label) rankGridPane.lookup("#foundFoodLabel" + (slot));
-                    switch (bot) {
-                        case RandomBot randomBot ->
-                            botType.setText("Aleatório");
-                        case SmartBot smartBot ->
-                            botType.setText("Inteligente");
-                        default ->
-                            botType.setText("Normal");
-                    }
+
+                    botType.setText(bot.getType().replace("Robô ", ""));
+
                     botColor.setText(colorDecoder(bot.getColor()));
                     botColorVBox.setBackground(Background.fill(Paint.valueOf(bot.getColor())));
                     validMoves.setText(String.valueOf(bot.getValidMoves()));
@@ -107,6 +92,7 @@ public class FinalScreenController {
             }
         }
     }
+
     public void goToHome(Event event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tela_inicial.fxml"));
         Parent root = loader.load();

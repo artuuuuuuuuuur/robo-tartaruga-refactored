@@ -3,7 +3,6 @@ package com.trabrobotartaruga.robo_tartaruga.classes.obstacle;
 import com.trabrobotartaruga.robo_tartaruga.TabletopController;
 import com.trabrobotartaruga.robo_tartaruga.classes.Map;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
-import com.trabrobotartaruga.robo_tartaruga.classes.bot.RandomBot;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.SmartBot;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidInputException;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
@@ -31,14 +30,7 @@ public class Stone extends Obstacle {
                 if (bot instanceof SmartBot smartBot) {
                     smartBot.setLastGoodMove(false);
                 }
-                switch (bot) {
-                    case SmartBot smartBot ->
-                        tabletopController.createLogLabel("Robô inteligente bateu na pedra.");
-                    case RandomBot randomBot ->
-                        tabletopController.createLogLabel("Robô aleatório bateu na pedra.");
-                    case Bot currenBot ->
-                        tabletopController.createLogLabel("Robô normal bateu na pedra.");
-                }
+                tabletopController.createLogLabel(bot.getType() + " bateu na pedra.");
             }
         }
     }
