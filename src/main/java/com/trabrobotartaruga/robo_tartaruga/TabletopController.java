@@ -1,10 +1,7 @@
 package com.trabrobotartaruga.robo_tartaruga;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
 import com.trabrobotartaruga.robo_tartaruga.classes.Map;
@@ -27,20 +24,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -123,14 +115,7 @@ public class TabletopController {
                                     lastMove = "";
                             }
 
-                            switch (bot) {
-                                case SmartBot smartBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô inteligente fez um movimento inválido para " + lastMove));
-                                case RandomBot randomBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô aleatório fez um movimento inválido para " + lastMove));
-                                case Bot currenBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô normal fez um movimento inválido para " + lastMove));
-                            }
+                            Platform.runLater(() -> createLogLabel(bot.getType() + " fez um movimento inválido para " + lastMove));
 
                             goodMove = false;
                         } catch (InvalidInputException | InterruptedException e) {
@@ -143,7 +128,7 @@ public class TabletopController {
                         }
                         bot.setRounds(bot.getRounds() + 1);
 
-                        if(goodMove) {
+                        if (goodMove) {
                             final String lastMove;
                             switch (bot.getLastMove()) {
                                 case 1 ->
@@ -157,14 +142,9 @@ public class TabletopController {
                                 default ->
                                     lastMove = "";
                             }
-                            switch (bot) {
-                                case SmartBot smartBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô inteligente se moveu para " + lastMove));
-                                case RandomBot randomBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô aleatório se moveu para " + lastMove));
-                                case Bot currenBot ->
-                                    Platform.runLater(() -> createLogLabel("Robô normal se moveu para " + lastMove));
-                            }
+
+                            Platform.runLater(() -> createLogLabel(bot.getType() + " se moveu para " + lastMove));
+
                         }
 
                         syncUpdate(() -> {
