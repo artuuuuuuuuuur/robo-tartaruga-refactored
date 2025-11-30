@@ -52,116 +52,85 @@ public class Bot {
 
     public void move(String move) throws InvalidMoveException, InvalidInputException {
         switch (move.toLowerCase()) {
-            case "up" ->
-                this.lastMove = 1;
-            case "down" ->
-                this.lastMove = 2;
-            case "left" ->
-                this.lastMove = 3;
-            case "right" ->
-                this.lastMove = 4;
-            default ->
-                throw new InvalidInputException();
-        }
-
-        switch (move.toLowerCase()) {
             case "up" -> {
-                if (posY < mapY - 1) {
-                    moveUp();
-                } else {
-                    posY = mapY - 1;
-                    throw new InvalidMoveException(color, "cima");
-                }
+                moveUp();
+                this.lastMove = 1;
             }
             case "down" -> {
-                if (posY > 0) {
-                    moveDown();
-                } else {
-                    throw new InvalidMoveException(color, "baixo");
-                }
-            }
-            case "right" -> {
-                if (posX < mapX - 1) {
-                    moveRight();
-                } else {
-                    throw new InvalidMoveException(color, "direita");
-                }
+                moveDown();
+                this.lastMove = 2;
             }
             case "left" -> {
-                if (posX > 0) {
-                    moveLeft();
-                } else {
-                    throw new InvalidMoveException(color, "esquerda");
-                }
+                moveLeft();
+                this.lastMove = 3;
             }
-            default -> {
+            case "right" -> {
+                moveRight();
+                this.lastMove = 4;
+            }
+            default ->
                 throw new InvalidInputException();
-            }
         }
     }
 
     public void move(int i) throws InvalidMoveException, InvalidInputException {
-        this.lastMove = i;
-
         switch (i) {
             case 1 -> {
-                if (posY < mapY - 1) {
-                    moveUp();
-                } else {
-                    posY = mapY - 1;
-                    throw new InvalidMoveException(color, "cima");
-                }
-                
+                moveUp();
+                this.lastMove = 1;
             }
-
             case 2 -> {
-                if (posY > 0) {
-                    moveDown();
-                } else {
-                    throw new InvalidMoveException(color, "baixo");
-                }
-                
+                moveDown();
+                this.lastMove = 2;
             }
             case 3 -> {
-                if (posX > 0) {
-                    moveLeft();
-                } else {
-                    throw new InvalidMoveException(color, "esquerda");
-                }
-                
+                moveLeft();
+                this.lastMove = 3;
             }
             case 4 -> {
-                if (posX < mapX - 1) {
-                    moveRight();
-                } else {
-                    throw new InvalidMoveException(color, "direita");
-                }
-                
+                moveRight();
+                this.lastMove = 4;
             }
-            default -> {
+            default ->
                 throw new InvalidInputException();
-            }
         }
     }
 
-    private void moveUp() {
-        posY++;
-        lastMove = 1;
+    private void moveUp() throws InvalidMoveException {
+        if (posY < mapY - 1) {
+            posY++;
+            lastMove = 1;
+        } else {
+            posY = mapY - 1;
+            throw new InvalidMoveException(color, "cima");
+        }
     }
 
-    private void moveDown() {
-        posY--;
-        lastMove = 2;
+    private void moveDown() throws InvalidMoveException {
+        if (posY > 0) {
+            posY--;
+            lastMove = 2;
+        } else {
+            throw new InvalidMoveException(color, "baixo");
+        }
     }
 
-    private void moveLeft() {
-        posX--;
-        lastMove = 3;
+    private void moveLeft() throws InvalidMoveException {
+        if (posX > 0) {
+            posX--;
+            lastMove = 3;
+        } else {
+            throw new InvalidMoveException(color, "esquerda");
+        }
     }
 
-    private void moveRight() {
-        posX++;
-        lastMove = 4;
+    private void moveRight() throws InvalidMoveException {
+        if (posX < mapX - 1) {
+            posX++;
+            lastMove = 4;
+        } else {
+            throw new InvalidMoveException(color, "direita");
+        }
     }
 
     public int getLastMove() {
