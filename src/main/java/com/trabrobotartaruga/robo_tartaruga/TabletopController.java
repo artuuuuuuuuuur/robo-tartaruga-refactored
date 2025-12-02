@@ -157,7 +157,8 @@ public class TabletopController {
                         if (!map.getObstacles().isEmpty()) {
                             try {
                                 Thread.sleep(300);
-                            } catch (InterruptedException ignored) {
+                            } catch (InterruptedException _) {
+                                showErrorPane("Erro ao pausar thread.");
                             }
 
                             syncUpdate(() -> {
@@ -268,7 +269,8 @@ public class TabletopController {
                 Stage currentstage = (Stage) ((Node) tabletopAnchorPane).getScene().getWindow();
                 currentstage.close();
                 Platform.runLater(() -> newStage.show());
-            } catch (IOException e) {
+            } catch (IOException _) {
+                showErrorPane("Erro ao carregar a tela final.");
             }
         });
     }
@@ -287,7 +289,8 @@ public class TabletopController {
             });
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
+        } catch (IOException _) {
+            Thread.currentThread().interrupt();
         }
     }
 
