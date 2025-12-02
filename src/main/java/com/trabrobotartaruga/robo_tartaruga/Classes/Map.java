@@ -124,7 +124,7 @@ public class Map {
             for (Position positionCell : positionRow) {
                 if (!positionCell.getObjects().isEmpty()) {
                     for (Object object : positionCell.getObjects()) {
-                        if (object instanceof Bot bot && (bot.getPosY() >= 0 && bot.getPosY() < positions.size() && bot.getPosX() >= 0 && bot.getPosX() < positions.get(bot.getPosY()).size())) {
+                        if (object instanceof Bot bot && isBotInBounds(bot)) {
                             positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
                             positionCell.getObjects().remove(bot);
                             bots.add(bot);
@@ -135,6 +135,13 @@ public class Map {
         }
         checkFoodFound();
         checkAllBotsDisabled();
+    }
+
+    private boolean isBotInBounds(Bot bot) {
+        return bot.getPosY() >= 0
+                && bot.getPosY() < positions.size()
+                && bot.getPosX() >= 0
+                && bot.getPosX() < positions.get(bot.getPosY()).size();
     }
 
     public void obstacleAction(TabletopController tabletopController) throws InvalidMoveException, InvalidInputException {
