@@ -2,7 +2,6 @@ package com.trabrobotartaruga.robo_tartaruga;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;

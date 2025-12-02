@@ -129,7 +129,7 @@ public class TabletopController {
                 map.updateBots();
                 showObjectsUI();
             } catch (InvalidMoveException | InvalidInputException e) {
-                e.printStackTrace();
+                showErrorPane(e.toString());
             }
         });
     }
