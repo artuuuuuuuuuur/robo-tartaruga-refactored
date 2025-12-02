@@ -2,6 +2,9 @@ package com.trabrobotartaruga.robo_tartaruga.utils;
 
 public class Colors {
 
+    private Colors() {
+    }
+
     public static String toString(String hexColor) {
         switch (hexColor) {
             case "0xffffffff" -> {
