@@ -7,6 +7,7 @@ public class Bot {
 
     protected final String color;
     protected String type;
+    protected String typeSnakeCase;
     protected int posX;
     protected int posY;
     protected int lastMove;
@@ -20,6 +21,7 @@ public class Bot {
     public Bot(String color, int mapX, int mapY) {
         this.color = color;
         this.type = "Robô normal";
+        this.typeSnakeCase = "bot";
         this.posX = 0;
         this.posY = 0;
         this.mapX = mapX;
@@ -171,5 +173,9 @@ public class Bot {
 
     public String getType() {
         return type;
+    }
+
+    public String getTypeSnakeCase() {
+        return typeSnakeCase;
     }
 }

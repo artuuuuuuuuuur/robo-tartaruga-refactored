@@ -9,11 +9,13 @@ public abstract class Obstacle {
     protected final int id;
     protected final int posX;
     protected final int posY;
+    protected final String type;
 
-    protected Obstacle(int id, int posX, int posY) {
+    protected Obstacle(int id, int posX, int posY, String type) {
         this.id = id;
         this.posX = posX;
         this.posY = posY;
+        this.type = type;
     }
     
     public abstract void hit(Map map, TabletopController tabletopController) throws InvalidMoveException, InvalidInputException; 
@@ -28,5 +30,9 @@ public abstract class Obstacle {
 
     public int getPosY() {
         return posY;
+    }
+
+    public String getType() {
+        return type;
     }
 }

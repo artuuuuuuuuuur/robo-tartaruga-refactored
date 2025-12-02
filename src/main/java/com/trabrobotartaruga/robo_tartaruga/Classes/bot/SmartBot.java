@@ -11,6 +11,7 @@ public class SmartBot extends Bot {
     public SmartBot(String color, int mapX, int mapY) {
         super(color, mapX, mapY);
         type = "Robô inteligente";
+        typeSnakeCase = "smartBot";
         lastGoodMove = true;
     }
 

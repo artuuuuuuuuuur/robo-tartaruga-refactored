@@ -11,7 +11,7 @@ public class Bomb extends Obstacle {
     private boolean exploded;
 
     public Bomb(int id, int posX, int posY) {
-        super(id, posX, posY);
+        super(id, posX, posY, "bomb");
         this.exploded = false;
     }
 
