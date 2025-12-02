@@ -26,6 +26,8 @@ public class Stone extends Obstacle {
                         bot.move(4);
                     case 4 ->
                         bot.move(3);
+                    default ->
+                        tabletopController.createLogLabel("Último movimento inválido.");
                 }
                 if (bot instanceof SmartBot smartBot) {
                     smartBot.setLastGoodMove(false);
