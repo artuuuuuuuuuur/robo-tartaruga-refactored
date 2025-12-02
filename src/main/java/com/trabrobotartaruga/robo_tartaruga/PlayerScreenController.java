@@ -166,7 +166,7 @@ public class PlayerScreenController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
@@ -238,7 +238,8 @@ public class PlayerScreenController implements Initializable {
 
                             stage.setScene(scene);
                             stage.show();
-                        } catch (IOException ex) {
+                        } catch (IOException _) {
+                            errorMessage("Erro ao abrir janela de escolha.");
                         }
                     });
                 }
