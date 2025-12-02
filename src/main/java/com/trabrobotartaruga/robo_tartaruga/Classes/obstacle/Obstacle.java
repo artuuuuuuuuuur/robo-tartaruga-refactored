@@ -10,7 +10,7 @@ public abstract class Obstacle {
     protected final int posX;
     protected final int posY;
 
-    public Obstacle(int id, int posX, int posY) {
+    protected Obstacle(int id, int posX, int posY) {
         this.id = id;
         this.posX = posX;
         this.posY = posY;
