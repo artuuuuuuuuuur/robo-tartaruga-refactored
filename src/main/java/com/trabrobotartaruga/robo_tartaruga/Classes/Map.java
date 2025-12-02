@@ -122,19 +122,25 @@ public class Map {
         winnerBots.clear();
         for (List<Position> positionRow : positions) {
             for (Position positionCell : positionRow) {
-                if (!positionCell.getObjects().isEmpty()) {
-                    for (Object object : positionCell.getObjects()) {
-                        if (object instanceof Bot bot && isBotInBounds(bot)) {
-                            positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
-                            positionCell.getObjects().remove(bot);
-                            bots.add(bot);
-                        }
-                    }
-                }
+                updateBotPosition(positionCell);
             }
         }
         checkFoodFound();
         checkAllBotsDisabled();
+    }
+
+    private void updateBotPosition(Position positionCell) {
+        if (!positionCell.getObjects().isEmpty()) {
+            return;
+        }
+        
+        for (Object object : positionCell.getObjects()) {
+            if (object instanceof Bot bot && isBotInBounds(bot)) {
+                positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
+                positionCell.getObjects().remove(bot);
+                bots.add(bot);
+            }
+        }
     }
 
     private boolean isBotInBounds(Bot bot) {

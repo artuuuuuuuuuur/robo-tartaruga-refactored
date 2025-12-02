@@ -9,6 +9,7 @@ public class RandomBot extends Bot {
     public RandomBot(String color, int mapX, int mapY) {
         super(color, mapX, mapY);
         type = "Robô aleatório";
+        typeSnakeCase = "random_bot";
     }
 
     @Override

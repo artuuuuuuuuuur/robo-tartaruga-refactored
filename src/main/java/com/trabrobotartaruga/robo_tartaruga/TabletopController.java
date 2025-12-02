@@ -9,7 +9,6 @@ import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.RandomBot;
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.SmartBot;
 import com.trabrobotartaruga.robo_tartaruga.classes.obstacle.Obstacle;
-import com.trabrobotartaruga.robo_tartaruga.classes.obstacle.Stone;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidInputException;
 import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
 
@@ -53,7 +52,7 @@ public class TabletopController {
     public void load(@SuppressWarnings("exports") Map map) {
         this.map = map;
 
-        showBots();
+        showObjectsUI();
         playGame();
     }
 
@@ -77,11 +76,11 @@ public class TabletopController {
     private void playRound() {
         for (Bot bot : map.getBots()) {
             boolean goodMove = true;
-            if (!isBotActive(bot)) {
+            if (isGameOver(bot)) {
                 continue;
             }
 
-            Platform.runLater(() -> botTurn(bot));
+            Platform.runLater(() -> showBotTurnLabel(bot));
 
             goodMove = moveBot(bot, goodMove);
 
@@ -90,7 +89,7 @@ public class TabletopController {
             if (goodMove) {
                 bot.setValidMoves(bot.getValidMoves() + 1);
             }
-            
+
             bot.setRounds(bot.getRounds() + 1);
 
             if (goodMove) {
@@ -99,7 +98,7 @@ public class TabletopController {
 
             syncUpdate(() -> {
                 map.updateBots();
-                showBots();
+                showObjectsUI();
             });
 
             if (map.isGameOver()) {
@@ -113,6 +112,10 @@ public class TabletopController {
         }
     }
 
+    private boolean isGameOver(Bot bot) {
+        return map.isGameOver() || !isBotActive(bot);
+    }
+
     private void executeObstaclesActions() {
         try {
             Thread.sleep(300);
@@ -124,7 +127,7 @@ public class TabletopController {
             try {
                 map.obstacleAction(this);
                 map.updateBots();
-                showBots();
+                showObjectsUI();
             } catch (InvalidMoveException | InvalidInputException e) {
                 e.printStackTrace();
             }
@@ -159,7 +162,7 @@ public class TabletopController {
                 case SmartBot smartBot ->
                     smartBot.move(0);
                 default -> {
-                    move(bot);
+                    handleInputMove(bot);
                     pause();
                 }
             }
@@ -217,7 +220,7 @@ public class TabletopController {
         }
     }
 
-    private void move(Bot bot) {
+    private void handleInputMove(Bot bot) {
         String[] possibleInputs = {"up", "down", "left", "right", "1", "2", "3", "4"};
         int goodInput = -1;
         boolean moved = false;
@@ -227,38 +230,54 @@ public class TabletopController {
             playerHBox.setDisable(false);
             pause();
 
-            for (int i = 0; i < possibleInputs.length; i++) {
-                if (moveTextField.getText().equals(possibleInputs[i])) {
-                    goodInput = i;
-                }
-            }
+            goodInput = checkInput(possibleInputs, goodInput, moveTextField);
 
             if (goodInput != -1) {
-                try {
-                    bot.move(moveTextField.getText());
-                    moved = true;
-                } catch (InvalidMoveException e) {
-                    playerHBox.setDisable(true);
-                    Platform.runLater(() -> showErrorPane(e.toString()));
-                    moved = false;
-                } catch (InvalidInputException ex) {
-                    try {
-                        bot.move(goodInput - 3);
-                        moved = true;
-                    } catch (InvalidMoveException | InvalidInputException e) {
-                        moved = false;
-                        Platform.runLater(() -> showErrorPane(e.toString()));
-                    }
-                    playerHBox.setDisable(true);
-                }
-            } else {
-                Platform.runLater(() -> showErrorPane(new InvalidInputException().toString()));
-                moved = false;
+                moved = TabletopController.this.move(bot, goodInput, playerHBox, moveTextField);
+                continue;
             }
+            Platform.runLater(() -> showErrorPane(new InvalidInputException().toString()));
         }
 
         playerHBox.setDisable(true);
         resume();
+    }
+
+    private boolean move(Bot bot, int goodInput, HBox playerHBox, TextField moveTextField) {
+        boolean moved;
+        try {
+            bot.move(moveTextField.getText());
+            moved = true;
+        } catch (InvalidInputException ex) {
+            moved = move(bot, goodInput);
+            playerHBox.setDisable(true);
+        } catch (InvalidMoveException e) {
+            playerHBox.setDisable(true);
+            Platform.runLater(() -> showErrorPane(e.toString()));
+            moved = false;
+        }
+        return moved;
+    }
+
+    private boolean move(Bot bot, int goodInput) {
+        boolean moved;
+        try {
+            bot.move(goodInput - 3);
+            moved = true;
+        } catch (InvalidMoveException | InvalidInputException e) {
+            moved = false;
+            Platform.runLater(() -> showErrorPane(e.toString()));
+        }
+        return moved;
+    }
+
+    private int checkInput(String[] possibleInputs, int goodInput, TextField moveTextField) {
+        for (int i = 0; i < possibleInputs.length; i++) {
+            if (moveTextField.getText().equals(possibleInputs[i])) {
+                goodInput = i;
+            }
+        }
+        return goodInput;
     }
 
     public void resume() {
@@ -276,11 +295,12 @@ public class TabletopController {
     private void goToFinalScreen(List<Bot> bots, List<Bot> winnerBot) {
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tela_final.fxml"));
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tela_final.fxml"));
                 Parent root = loader.load();
                 Stage newStage = new Stage();
                 FinalScreenController finalScreenController = loader.getController();
-                finalScreenController.build(bots, winnerBot);
+                finalScreenController.buildScreen(bots, winnerBot);
                 newStage.setTitle("Resultado Final");
                 newStage.setScene(new Scene(root));
                 Stage currentstage = (Stage) ((Node) tabletopAnchorPane).getScene().getWindow();
@@ -311,7 +331,7 @@ public class TabletopController {
         }
     }
 
-    private void botTurn(Bot bot) {
+    private void showBotTurnLabel(Bot bot) {
         Label botTurnLabel = (Label) tabletopAnchorPane.lookup("#botTurnLabel");
         switch (bot) {
             case SmartBot smartBot -> {
@@ -337,81 +357,62 @@ public class TabletopController {
         moveLogsVBox.getChildren().add(newLabel);
     }
 
-    private void showBots() {
+    private void showObjectsUI() {
+        String assetsPath = "/com/trabrobotartaruga/robo_tartaruga/assets/";
         for (int i = 0; i < map.getX(); i++) {
             for (int j = 0; j < map.getY(); j++) {
-                FlowPane gridCell = (FlowPane) gameGrid.lookup("#gridCell" + i + "" + j);
-                gridCell.getChildren().clear();
-                if (map.getFood().getPosX() == j && map.getFood().getPosY() == i) {
-                    ImageView foodImage = new ImageView(new Image(getClass().getResourceAsStream("/com/trabrobotartaruga/robo_tartaruga/assets/food.png"), 100, 100, false, false));
-                    gridCell.getChildren().add(foodImage);
-                }
-                for (Obstacle obstacle : map.getObstacles()) {
-                    if (obstacle.getPosX() == j && obstacle.getPosY() == i) {
-                        if (obstacle instanceof Stone) {
-                            ImageView stoneImage = new ImageView(new Image(getClass().getResourceAsStream("/com/trabrobotartaruga/robo_tartaruga/assets/stone.png"), 100, 100, false, false));
-                            gridCell.getChildren().add(stoneImage);
-                        } else {
-                            ImageView bombImage = new ImageView(new Image(getClass().getResourceAsStream("/com/trabrobotartaruga/robo_tartaruga/assets/bomb.png"), 100, 100, false, false));
-                            gridCell.getChildren().add(bombImage);
-                        }
-                    }
-                }
+                showObjectsImage(i, j, assetsPath);
+                styleBotsImage(i, j, assetsPath);
             }
         }
-        for (int i = 0; i < map.getX(); i++) {
-            for (int j = 0; j < map.getY(); j++) {
-                if (!map.getPositions().get(i).get(j).getObjects().isEmpty()) {
-                    for (Object object : map.getPositions().get(i).get(j).getObjects()) {
-                        FlowPane gridCell = (FlowPane) gameGrid.lookup("#gridCell" + i + "" + j);
-                        DropShadow dropShadow = new DropShadow();
-                        ColorAdjust monochrome = new ColorAdjust();
-                        monochrome.setSaturation(-1);
-                        dropShadow.setRadius(1.0);
-                        dropShadow.setOffsetX(10.0);
-                        dropShadow.setOffsetY(10.0);
-                        switch (object) {
-                            case RandomBot randomBot -> {
-                                ImageView image = new ImageView(new Image(
-                                        getClass().getResourceAsStream(
-                                                "/com/trabrobotartaruga/robo_tartaruga/assets/random_bot.png"),
-                                        70, 70, false, false));
-                                dropShadow.setColor(Color.valueOf(randomBot.getColor()));
-                                if (!randomBot.isActive()) {
-                                    dropShadow.setInput(monochrome);
-                                }
-                                image.setEffect(dropShadow);
-                                gridCell.getChildren().add(image);
-                            }
-                            case SmartBot smartBot -> {
-                                ImageView image = new ImageView(new Image(
-                                        getClass().getResourceAsStream(
-                                                "/com/trabrobotartaruga/robo_tartaruga/assets/smart_bot.png"),
-                                        55, 55, false, false));
-                                dropShadow.setColor(Color.valueOf(smartBot.getColor()));
-                                if (!smartBot.isActive()) {
-                                    dropShadow.setInput(monochrome);
-                                }
-                                image.setEffect(dropShadow);
-                                gridCell.getChildren().add(image);
-                            }
-                            case Bot bot -> {
-                                ImageView image = new ImageView(new Image(
-                                        getClass().getResourceAsStream(
-                                                "/com/trabrobotartaruga/robo_tartaruga/assets/bot.png"),
-                                        55, 55, false, false));
-                                dropShadow.setColor(Color.valueOf(bot.getColor()));
-                                if (!bot.isActive()) {
-                                    dropShadow.setInput(monochrome);
-                                }
-                                image.setEffect(dropShadow);
-                                gridCell.getChildren().add(image);
-                            }
-                            default -> {
-                            }
-                        }
-                    }
+    }
 
+    private void showObjectsImage(int i, int j, String assetsPath) {
+        FlowPane gridCell = (FlowPane) gameGrid.lookup("#gridCell" + i + "" + j);
+        gridCell.getChildren().clear();
+
+        if (map.getFood().getPosX() == j && map.getFood().getPosY() == i) {
+            ImageView foodImage = new ImageView(
+                    new Image(getClass().getResourceAsStream(assetsPath + "food.png"), 100, 100, false, false));
+            gridCell.getChildren().add(foodImage);
+            return;
+        }
+
+        showObstaclesImage(i, j, assetsPath, gridCell);
+    }
+
+    private void showObstaclesImage(int i, int j, String assetsPath, FlowPane gridCell) {
+        for (Obstacle obstacle : map.getObstacles()) {
+            if (obstacle.getPosX() == j && obstacle.getPosY() == i) {
+                ImageView obstacleImage = new ImageView(
+                        new Image(getClass().getResourceAsStream(assetsPath + obstacle.getType() + ".png"), 100, 100,
+                                false, false));
+                gridCell.getChildren().add(obstacleImage);
+            }
+        }
+    }
+
+    private void styleBotsImage(int i, int j, String assetsPath) {
+        if (!map.getPositions().get(i).get(j).getObjects().isEmpty()) {
+            for (Object object : map.getPositions().get(i).get(j).getObjects()) {
+                FlowPane gridCell = (FlowPane) gameGrid.lookup("#gridCell" + i + "" + j);
+                DropShadow dropShadow = new DropShadow();
+                ColorAdjust monochrome = new ColorAdjust();
+                monochrome.setSaturation(-1);
+                dropShadow.setRadius(1.0);
+                dropShadow.setOffsetX(10.0);
+                dropShadow.setOffsetY(10.0);
+                if (object instanceof Bot bot) {
+                    ImageView image = new ImageView(new Image(
+                            getClass().getResourceAsStream(
+                                    assetsPath + bot.getTypeSnakeCase() + ".png"),
+                            70, 70, false, false));
+                    dropShadow.setColor(Color.valueOf(bot.getColor()));
+                    if (!bot.isActive()) {
+                        dropShadow.setInput(monochrome);
+                    }
+                    image.setEffect(dropShadow);
+                    gridCell.getChildren().add(image);
                 }
             }
         }

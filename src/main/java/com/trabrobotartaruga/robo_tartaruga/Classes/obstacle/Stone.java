@@ -10,7 +10,7 @@ import com.trabrobotartaruga.robo_tartaruga.exceptions.InvalidMoveException;
 public class Stone extends Obstacle {
 
     public Stone(int id, int posX, int posY) {
-        super(id, posX, posY);
+        super(id, posX, posY, "stone");
     }
 
     @Override
