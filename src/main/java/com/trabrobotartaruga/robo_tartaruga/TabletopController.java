@@ -290,7 +290,7 @@ public class TabletopController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException _) {
-            System.err.println("Erro ao abrir janela de erro.");
+            Thread.currentThread().interrupt();
         }
     }
 

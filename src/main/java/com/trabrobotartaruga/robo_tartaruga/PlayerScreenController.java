@@ -165,8 +165,8 @@ public class PlayerScreenController implements Initializable {
             });
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
-            System.out.println(e);
+        } catch (IOException _) {
+            Thread.currentThread().interrupt();
         }
     }
 
