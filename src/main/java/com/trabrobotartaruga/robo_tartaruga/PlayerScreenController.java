@@ -69,7 +69,7 @@ public class PlayerScreenController implements Initializable {
         Platform.runLater(this::buildPreviewGrid);
         Platform.runLater(() -> {
             for (int i = 0; i < 2; i++) {
-                ComboBox<String> chooseBotComboBox = (ComboBox) gameModeAnchorPane.lookup("#chooseBot" + (i + 1) + "ComboBox");
+                chooseBotComboBox = (ComboBox) gameModeAnchorPane.lookup("#chooseBot" + (i + 1) + "ComboBox");
                 chooseBotComboBox.getItems().add("Robô normal");
                 chooseBotComboBox.getItems().add("Robô aleatório");
                 chooseBotComboBox.getItems().add("Robô inteligente");
@@ -176,18 +176,15 @@ public class PlayerScreenController implements Initializable {
     }
 
     private void goToTabletopScreen(Event event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tabuleiro.fxml"));
-            Parent root = loader.load();
-            TabletopController tabletopController = loader.getController();
-            tabletopController.load(map);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trabrobotartaruga/robo_tartaruga/tabuleiro.fxml"));
+        Parent root = loader.load();
+        TabletopController tabletopController = loader.getController();
+        tabletopController.load(map);
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            throw e;
-        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+
     }
 
     public void clearObjects() {
