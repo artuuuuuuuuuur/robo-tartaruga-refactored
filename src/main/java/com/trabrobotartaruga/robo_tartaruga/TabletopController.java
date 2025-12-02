@@ -58,7 +58,7 @@ public class TabletopController {
     }
 
     private void play() {
-        new Thread(() -> {
+        Thread.ofVirtual().start(() -> {
             try {
                 while (!map.isGameOver()) {
                     currentTurn++;
@@ -181,7 +181,7 @@ public class TabletopController {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        }).start();
+        });
     }
 
     private void syncUpdate(Runnable action) {
