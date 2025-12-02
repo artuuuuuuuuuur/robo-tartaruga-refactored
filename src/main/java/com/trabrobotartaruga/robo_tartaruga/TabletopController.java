@@ -68,10 +68,8 @@ public class TabletopController {
                         }
                         boolean othersInacive = true;
                         for (Bot botCheck : map.getBots()) {
-                            if (!botCheck.equals(bot)) {
-                                if (botCheck.isActive()) {
-                                    othersInacive = false;
-                                }
+                            if (!botCheck.equals(bot) && botCheck.isActive()) {
+                                othersInacive = false;
                             }
                         }
 

@@ -79,11 +79,9 @@ public class PlayerScreenController implements Initializable {
             ComboBox<String> chooseBotComboBox = (ComboBox) gameModeAnchorPane.lookup("#chooseBot" + (i + 1) + "ComboBox");
             ColorPicker colorBotPicker = (ColorPicker) gameModeAnchorPane.lookup("#colorBot" + (i + 1) + "Picker");
 
-            if (i == 0) {
-                if (chooseBotComboBox.getValue() == null || colorBotPicker.getValue() == null) {
-                    errorMessage("Escolha uma cor e o tipo do robô " + (i + 1) + ".");
-                    return;
-                }
+            if (i == 0 && (chooseBotComboBox.getValue() == null || colorBotPicker.getValue() == null)) {
+                errorMessage("Escolha uma cor e o tipo do robô " + (i + 1) + ".");
+                return;
             }
 
             if (i == 0) {
@@ -107,11 +105,9 @@ public class PlayerScreenController implements Initializable {
         }
         for (Obstacle obstacle1 : obstacles) {
             for (Obstacle obstacle2 : obstacles) {
-                if (obstacles.indexOf(obstacle1) != obstacles.indexOf(obstacle2)) {
-                    if (obstacle1.getPosX() == obstacle2.getPosX() && obstacle1.getPosY() == obstacle2.getPosY()) {
-                        errorMessage("Não coloque 2 objetos na mesma posição. Limpe o preview e tente novamente.");
-                        return;
-                    }
+                if (obstacles.indexOf(obstacle1) != obstacles.indexOf(obstacle2) && (obstacle1.getPosX() == obstacle2.getPosX() && obstacle1.getPosY() == obstacle2.getPosY())) {
+                    errorMessage("Não coloque 2 objetos na mesma posição. Limpe o preview e tente novamente.");
+                    return;
                 }
             }
             if (obstacle1.getPosX() == food.getPosX() && obstacle1.getPosY() == food.getPosY()) {

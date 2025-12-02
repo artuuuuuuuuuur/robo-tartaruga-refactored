@@ -124,12 +124,10 @@ public class Map {
             for (Position positionCell : positionRow) {
                 if (!positionCell.getObjects().isEmpty()) {
                     for (Object object : positionCell.getObjects()) {
-                        if (object instanceof Bot bot) {
-                            if (bot.getPosY() >= 0 && bot.getPosY() < positions.size() && bot.getPosX() >= 0 && bot.getPosX() < positions.get(bot.getPosY()).size()) {
-                                positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
-                                positionCell.getObjects().remove(bot);
-                                bots.add(bot);
-                            }
+                        if (object instanceof Bot bot && (bot.getPosY() >= 0 && bot.getPosY() < positions.size() && bot.getPosX() >= 0 && bot.getPosX() < positions.get(bot.getPosY()).size())) {
+                            positions.get(bot.getPosY()).get(bot.getPosX()).getObjects().add(bot);
+                            positionCell.getObjects().remove(bot);
+                            bots.add(bot);
                         }
                     }
                 }
@@ -142,14 +140,12 @@ public class Map {
     public void obstacleAction(TabletopController tabletopController) throws InvalidMoveException, InvalidInputException {
         for (Obstacle obstacle : obstacles) {
             obstacle.hit(this, tabletopController);
-            if (obstacle instanceof Bomb bomb) {
-                if (bomb.isExploded()) {
-                    obstacles.remove(bomb);
-                }
+            if (obstacle instanceof Bomb bomb && bomb.isExploded()) {
+                obstacles.remove(bomb);
             }
         }
     }
-    
+
     public boolean hasAnotherActiveBot(Bot current) {
         for (Bot b : bots) {
             if (!b.equals(current) && b.isActive()) {
@@ -158,7 +154,6 @@ public class Map {
         }
         return false;
     }
-
 
     public boolean isGameOver() {
         if (oneWinner && foodFound) {
