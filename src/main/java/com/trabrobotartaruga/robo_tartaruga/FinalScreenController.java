@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.trabrobotartaruga.robo_tartaruga.classes.bot.Bot;
+import com.trabrobotartaruga.robo_tartaruga.utils.Colors;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -58,7 +59,7 @@ public class FinalScreenController {
 
             botType.setText(bot.getType().replace("Robô ", ""));
 
-            botColor.setText(colorDecoder(bot.getColor()));
+            botColor.setText(Colors.toString(bot.getColor()));
             botColorVBox.setBackground(Background.fill(Paint.valueOf(bot.getColor())));
             validMoves.setText(String.valueOf(bot.getValidMoves()));
             invalidMoves.setText(String.valueOf(bot.getInvalidMoves()));
@@ -88,7 +89,7 @@ public class FinalScreenController {
 
             botType.setText(winnerBot.getType().replace("Robô ", ""));
 
-            botColor.setText(colorDecoder(winnerBot.getColor()));
+            botColor.setText(Colors.toString(winnerBot.getColor()));
             botColorVBox.setBackground(Background.fill(Paint.valueOf(winnerBot.getColor())));
             validMoves.setText(String.valueOf(winnerBot.getValidMoves()));
             invalidMoves.setText(String.valueOf(winnerBot.getInvalidMoves()));
@@ -111,7 +112,7 @@ public class FinalScreenController {
 
     private void showMatchResult(List<Bot> winnerBots) {
         if (winnerBots.size() == 1) {
-            h2Label.setText("O robô " + colorDecoder(winnerBots.get(0).getColor()) + " achou o alimento");
+            h2Label.setText("O robô " + Colors.toString(winnerBots.get(0).getColor()) + " achou o alimento");
             return;
         }
         h2Label.setText("Todos os robôs acharam o alimento");
@@ -123,31 +124,5 @@ public class FinalScreenController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
-    }
-
-    private String colorDecoder(String hexColor) {
-        switch (hexColor) {
-            case "0xffffffff" -> {
-                return "branco";
-            }
-            case "0x000000ff" -> {
-                return "preto";
-            }
-            case "0x00ff00ff" -> {
-                return "verde";
-            }
-            case "0xff0000ff" -> {
-                return "vermelho";
-            }
-            case "0xffff00ff" -> {
-                return "amarelo";
-            }
-            case "0x0000ffff" -> {
-                return "azul";
-            }
-            default -> {
-                return hexColor;
-            }
-        }
     }
 }
