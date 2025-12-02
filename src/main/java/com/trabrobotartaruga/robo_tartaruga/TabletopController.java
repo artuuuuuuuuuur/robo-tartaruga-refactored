@@ -54,125 +54,15 @@ public class TabletopController {
         this.map = map;
 
         showBots();
-        play();
+        playGame();
     }
 
-    private void play() {
+    private void playGame() {
         Thread.ofVirtual().start(() -> {
             try {
                 while (!map.isGameOver()) {
                     currentTurn++;
-                    for (Bot bot : map.getBots()) {
-                        if (map.isGameOver()) {
-                            break;
-                        }
-                        boolean othersInacive = true;
-                        for (Bot botCheck : map.getBots()) {
-                            if (!botCheck.equals(bot) && botCheck.isActive()) {
-                                othersInacive = false;
-                            }
-                        }
-
-                        if (bot.equals(lastPlayedBot) && lastTurn == currentTurn) {
-                            continue;
-                        }
-
-                        if (((bot.equals(lastPlayedBot) && !othersInacive) && map.getBots().size() > 1) || !bot.isActive()) {
-                            continue;
-                        }
-
-                        boolean goodMove = true;
-                        Platform.runLater(() -> botTurn(bot));
-
-                        try {
-                            Thread.sleep(600);
-
-                            switch (bot) {
-                                case RandomBot randomBot ->
-                                    randomBot.move("");
-                                case SmartBot smartBot ->
-                                    smartBot.move(0);
-                                default -> {
-                                    move(bot);
-                                    pause();
-                                }
-                            }
-                        } catch (InvalidMoveException e) {
-                            bot.setInvalidMoves(bot.getInvalidMoves() + 1);
-                            final String lastMove;
-                            switch (bot.getLastMove()) {
-                                case 1 ->
-                                    lastMove = "cima";
-                                case 2 ->
-                                    lastMove = "baixo";
-                                case 3 ->
-                                    lastMove = "esquerda";
-                                case 4 ->
-                                    lastMove = "direita";
-                                default ->
-                                    lastMove = "";
-                            }
-
-                            Platform.runLater(() -> createLogLabel(bot.getType() + " fez um movimento inválido para " + lastMove));
-
-                            goodMove = false;
-                        } catch (InvalidInputException | InterruptedException e) {
-                            goodMove = false;
-                        }
-
-                        lastPlayedBot = bot;
-                        if (goodMove) {
-                            bot.setValidMoves(bot.getValidMoves() + 1);
-                        }
-                        bot.setRounds(bot.getRounds() + 1);
-
-                        if (goodMove) {
-                            final String lastMove;
-                            switch (bot.getLastMove()) {
-                                case 1 ->
-                                    lastMove = "cima";
-                                case 2 ->
-                                    lastMove = "baixo";
-                                case 3 ->
-                                    lastMove = "esquerda";
-                                case 4 ->
-                                    lastMove = "direita";
-                                default ->
-                                    lastMove = "";
-                            }
-
-                            Platform.runLater(() -> createLogLabel(bot.getType() + " se moveu para " + lastMove));
-
-                        }
-
-                        syncUpdate(() -> {
-                            map.updateBots();
-                            showBots();
-                        });
-
-                        if (map.isGameOver()) {
-                            break;
-                        }
-
-                        if (!map.getObstacles().isEmpty()) {
-                            try {
-                                Thread.sleep(300);
-                            } catch (InterruptedException _) {
-                                showErrorPane("Erro ao pausar thread.");
-                            }
-
-                            syncUpdate(() -> {
-                                try {
-                                    map.obstacleAction(this);
-                                    map.updateBots();
-                                    showBots();
-                                } catch (InvalidMoveException | InvalidInputException e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                        }
-                        lastTurn = currentTurn;
-                    }
+                    playRound();
                 }
 
                 Thread.sleep(1000);
@@ -182,6 +72,133 @@ public class TabletopController {
                 Thread.currentThread().interrupt();
             }
         });
+    }
+
+    private void playRound() {
+        for (Bot bot : map.getBots()) {
+            boolean goodMove = true;
+            if (!isBotActive(bot)) {
+                continue;
+            }
+
+            Platform.runLater(() -> botTurn(bot));
+
+            goodMove = moveBot(bot, goodMove);
+
+            lastPlayedBot = bot;
+
+            if (goodMove) {
+                bot.setValidMoves(bot.getValidMoves() + 1);
+            }
+            
+            bot.setRounds(bot.getRounds() + 1);
+
+            if (goodMove) {
+                lastMoveLog(bot);
+            }
+
+            syncUpdate(() -> {
+                map.updateBots();
+                showBots();
+            });
+
+            if (map.isGameOver()) {
+                break;
+            }
+
+            if (!map.getObstacles().isEmpty()) {
+                executeObstaclesActions();
+            }
+            lastTurn = currentTurn;
+        }
+    }
+
+    private void executeObstaclesActions() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException _) {
+            showErrorPane("Erro ao pausar thread.");
+        }
+
+        syncUpdate(() -> {
+            try {
+                map.obstacleAction(this);
+                map.updateBots();
+                showBots();
+            } catch (InvalidMoveException | InvalidInputException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void lastMoveLog(Bot bot) {
+        final String lastMove;
+        switch (bot.getLastMove()) {
+            case 1 ->
+                lastMove = "cima";
+            case 2 ->
+                lastMove = "baixo";
+            case 3 ->
+                lastMove = "esquerda";
+            case 4 ->
+                lastMove = "direita";
+            default ->
+                lastMove = "";
+        }
+
+        Platform.runLater(() -> createLogLabel(bot.getType() + " se moveu para " + lastMove));
+    }
+
+    private boolean moveBot(Bot bot, boolean goodMove) {
+        try {
+            Thread.sleep(600);
+
+            switch (bot) {
+                case RandomBot randomBot ->
+                    randomBot.move(0);
+                case SmartBot smartBot ->
+                    smartBot.move(0);
+                default -> {
+                    move(bot);
+                    pause();
+                }
+            }
+        } catch (InvalidMoveException e) {
+            bot.setInvalidMoves(bot.getInvalidMoves() + 1);
+            final String lastMove;
+            switch (bot.getLastMove()) {
+                case 1 ->
+                    lastMove = "cima";
+                case 2 ->
+                    lastMove = "baixo";
+                case 3 ->
+                    lastMove = "esquerda";
+                case 4 ->
+                    lastMove = "direita";
+                default ->
+                    lastMove = "";
+            }
+
+            Platform.runLater(() -> createLogLabel(bot.getType() + " fez um movimento inválido para " + lastMove));
+
+            goodMove = false;
+        } catch (InvalidInputException | InterruptedException e) {
+            goodMove = false;
+        }
+        return goodMove;
+    }
+
+    private boolean isBotActive(Bot bot) {
+        boolean othersInacive = true;
+        for (Bot botCheck : map.getBots()) {
+            if (!botCheck.equals(bot) && botCheck.isActive()) {
+                othersInacive = false;
+            }
+        }
+        if (bot.equals(lastPlayedBot) && lastTurn == currentTurn) {
+            return false;
+        }
+        return !(((bot.equals(lastPlayedBot) && !othersInacive) && map.getBots().size() > 1) || !bot.isActive());
     }
 
     private void syncUpdate(Runnable action) {
